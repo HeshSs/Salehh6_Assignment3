@@ -9,12 +9,9 @@ public class Main {
         question = "(" + question + ")";
         System.out.println(answerGenerator(question));
 
-        System.out.println(answerGenerator("(3&2&33@66)"));
-
     }
 
     private static Integer maxOrMinCalculator(String string) throws Exception {
-        //string = parenthesesAdder(string);
 
         String operation = "";
         int a = 0;
@@ -64,7 +61,8 @@ public class Main {
             }
         }
         if (counter > 1) {
-            return answerGenerator(parenthesesAdder(withinBrackets));
+            input = input.replace(withinBrackets, parenthesesAdder(withinBrackets));
+            return answerGenerator(input);
         }
 
         input = input.replace(withinBrackets, String.valueOf(maxOrMinCalculator(withinBrackets)));
