@@ -12,7 +12,7 @@ public class Main {
         try {
             System.out.println(answerGenerator(question));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.toString());
         }
 
     }
@@ -47,7 +47,8 @@ public class Main {
 
         Exception invalidC = new Exception("INVALID CHARACTERS");
         Exception invalidE = new Exception("INVALID EXPRESSION");
-        String invalidCharacters = " ~!#$%^*_+qwertyuiop[]asdfghjkl;'zxcvbnm,./";
+        String invalidCharacters = " -~!#$%^*_+qwertyuiop[]asdfghjkl;'zxcvbnm,./";
+        String validNumbers = "0123456789";
         Stack<Character> stack = new Stack<>();
         int openBracketIndex = 0;
         int closedBracketIndex = 0;
@@ -55,7 +56,7 @@ public class Main {
         for (int i = 0; i < input.length(); i++) {
             for (int j = 0; j < invalidCharacters.length(); j++) {
                 if (input.charAt(i) == invalidCharacters.charAt(j)) {
-                    throw invalidC;
+                    throw invalidC; // "INVALID CHARACTERS"
                 }
             }
         }
@@ -67,12 +68,30 @@ public class Main {
                 try {
                     stack.pop();
                 } catch (Exception e) {
-                    throw invalidE;
+                    throw invalidE; // "INVALID EXPRESSION"
                 }
             }
         }
+/*
+        for (int i = 0; i < input.length(); i++) {
+            for (int j = 0; j < validNumbers.length(); j++) {
+                if (input.charAt(i) == validNumbers.charAt(j)) {
+                    if (input.charAt(i+1) == '@' || input.charAt(i-1) == '@' || input.charAt(i+1) == '&' || input.charAt(i-1) == '&') {
+                        continue;
+                    }
+                    for (int k = 0; k < validNumbers.length(); k++) {
+                        if (input.charAt(i+1) == validNumbers.charAt(k)) {
+                            continue;
+                        } else {
+                            throw invalidE;
+                        }
+                    }
+                }
+            }
+        }
+*/
         if (!stack.empty()) {
-            throw invalidE;
+            throw invalidE; // "INVALID EXPRESSION"
         }
 
         for (int i = 0; i < input.length(); i++) {
@@ -97,7 +116,6 @@ public class Main {
                 counter ++;
             }
         }
-        System.out.println(withinBrackets);
 
         if (counter > 1) {
 
@@ -136,18 +154,32 @@ public class Main {
 }
 
 /*
-
 Test Cases
+------------
 Part1
 ------------
 test1 = (((22@(55&(55)))&(33&44))&((40@23)&(50@25))) == 44
 test2 = (((22@(55&(55)))&(33&44))&((40@23)&(50@25)))@(3&2&33@66) == 33
 test3 = 22@((12@45)&14) == 14
-
+test4 = (23&24@23&24&25&(23@24))&(23&24&22&21) == 25
+test5 = (23333) == 23333
+------------
 Part2
 ------------
 test1 = (((22@(55&55))&(33&44))&(((40@23)&(50@25))) == "INVALID EXPRESSION"
 test2 = (22@((12@45)&14)) ( == "INVALID CHARACTERS"
 test3 = (22@((12@45)&14))( == "INVALID EXPRESSION"
 test4 = (22+((12@45)14z)) == "INVALID CHARACTERS"
+
+test7 = (((((98#))))))) == "INVALID CHARACTERS"
+test8 = (23&(-25)) == "INVALID CHARACTERS"
+
+test11 = (2#5) == "INVALID CHARACTERS"
+Wrong Answer:
+test5 = (86&45@23&45&84)@(45((23))) ==  "INVALID EXPRESSION"
+test6 = (88&(23@12))(76) == "INVALID EXPRESSION"
+test9 = 25&30& == "INVALID EXPRESSION"
+test10 = &27@(19) == "INVALID EXPRESSION"
+
+------------
  */
