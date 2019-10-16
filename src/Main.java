@@ -14,7 +14,7 @@ public class Main {
         } catch (NumberFormatException e) {
             System.out.println("INVALID EXPRESSION");
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
 
     }
@@ -55,6 +55,7 @@ public class Main {
         int openBracketIndex = 0;
         int closedBracketIndex = 0;
 
+        // If there's a character other than "()0123456789&@"
         for (int i = 0; i < input.length(); i++) {
             for (int j = 0; j < invalidCharacters.length(); j++) {
                 if (input.charAt(i) == invalidCharacters.charAt(j)) {
@@ -63,6 +64,7 @@ public class Main {
             }
         }
 
+        // Mismatching Parentheses
         for (int i = 0; i < input.length(); i++) {
             if (input.charAt(i) == '(' )  {
                 stack.push(input.charAt(i));
@@ -75,6 +77,11 @@ public class Main {
             }
         }
 
+        if (!stack.empty()) {
+            throw invalidE; // "INVALID EXPRESSION"
+        }
+
+        // (45(34)) or 43(44) or )(
         for (int i = 1; i < input.length(); i++) {
             if (input.charAt(i) == '(') {
                 for (int j = 0; j < validCharacters.length(); j++) {
@@ -85,8 +92,13 @@ public class Main {
             }
         }
 
-        if (!stack.empty()) {
-            throw invalidE; // "INVALID EXPRESSION"
+        // Cases 25&30& or (&25&30)
+        for (int i = 1; i < input.length(); i++) {
+            if (input.charAt(i) == '&' || input.charAt(i) == '@') {
+                if (input.charAt(i-1) == '(' || input.charAt(i+1) == ')' ) {
+                    throw invalidE;
+                }
+            }
         }
 
         for (int i = 0; i < input.length(); i++) {
@@ -169,12 +181,9 @@ test5 = (86&45@23&45&84)@(45((23))) ==  "INVALID EXPRESSION"
 test6 = (88&(23@12))(76) == "INVALID EXPRESSION"
 test7 = (((((98#))))))) == "INVALID CHARACTERS"
 test8 = (23&(-25)) == "INVALID CHARACTERS"
-
-test11 = (2#5) == "INVALID CHARACTERS"
-Wrong Answer:
-
 test9 = 25&30& == "INVALID EXPRESSION"
 test10 = &27@(19) == "INVALID EXPRESSION"
+test11 = (2#5) == "INVALID CHARACTERS"
 
 ------------
  */
